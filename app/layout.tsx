@@ -1,0 +1,21 @@
+import type { Metadata } from 'next'
+import './globals.css'
+
+export const metadata: Metadata = {
+  title: 'RoyaleMeta',
+  description: 'Plataforma Clash Royale',
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="es">
+      <body>
+        {children}
+      </body>
+    </html>
+  )
+}
