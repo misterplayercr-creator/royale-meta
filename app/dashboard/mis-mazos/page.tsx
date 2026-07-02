@@ -30,15 +30,20 @@ export default function MisMazosPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-white">Mis Mazos</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-white">Mis Mazos</h1>
+        <a href="/dashboard/mis-mazos/nuevo" className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-white text-sm font-semibold">
+          + Nuevo Mazo
+        </a>
+      </div>
       {loading ? (
         <div className="text-[#94a3b8]">Cargando mazos...</div>
       ) : mazos.length === 0 ? (
         <div className="p-8 rounded-2xl bg-[#1a2d4a] border border-[#1a2d4a] text-center">
           <p className="text-[#94a3b8] mb-4">No has enviado ningún mazo aún</p>
-          <button className="px-6 py-2 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-white font-semibold">
+          <a href="/dashboard/mis-mazos/nuevo" className="inline-block px-6 py-2 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-white font-semibold">
             Enviar mi primer mazo
-          </button>
+          </a>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
