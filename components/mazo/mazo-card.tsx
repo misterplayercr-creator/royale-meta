@@ -6,7 +6,15 @@ import Link from 'next/link'
 import { createBrowserClient } from '@supabase/ssr'
 import { toast } from 'react-hot-toast'
 
-export default function MazoCard({ id, titulo, descripcion, imagen_url, cartas, puntos_votos, votos_positivos, votos_negativos, usuario, onVoto }: any) {
+const getCartaImageUrl = (carta: string) => {
+  const cartaFormateada = carta.toLowerCase()
+    .replace(/[^a-z0-9]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/-$/, '')
+  return `/cards/${cartaFormateada}.png`
+}
+
+export default function MazoCard({ id, titulo, descripcion, cartas, puntos_votos, votos_positivos, votos_negativos, usuario, onVoto }: any) {
   const [loading, setLoading] = useState(false)
   const [votado, setVotado] = useState(false)
   const [votos, setVotos] = useState({ positivos: votos_positivos, negativos: votos_negativos })
@@ -43,10 +51,26 @@ export default function MazoCard({ id, titulo, descripcion, imagen_url, cartas, 
   }
 
   return (
-    <div className="rounded-2xl bg-[#1a2d4a] border border-[#1a2d4a] overflow-hidden card-hover h-full flex flex-col">
+    <div className="rounded-2xl bg-[#132d4d] border border-[#87CEEB]/30 overflow-hidden card-hover h-full flex flex-col">
       <Link href={`/mazos/${id}`}>
         <div className="relative h-48 bg-gradient-to-br from-[#87CEEB]/20 to-[#3B82F6]/20 flex items-center justify-center">
-          <span className="text-6xl">🧊</span>
+          {cartas && cartas.length > 0 ? (
+            <div className="grid grid-cols-4 gap-1 p-2">
+              {cartas.slice(0, 4).map((carta: string, i: number) => (
+                <img 
+                  key={i} 
+                  src={`/cards/${carta.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}.png`}
+                  alt={carta}
+                  className="w-10 h-10 object-contain"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/cards/card-legendary-unknown.png'
+                  }}
+                />
+              ))}
+            </div>
+          ) : (
+            <span className="text-6xl">🧊</span>
+          )}
           <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-[#87CEEB]/20 text-[#87CEEB] text-sm font-semibold">
             {puntos_votos} pts
           </div>
