@@ -166,3 +166,21 @@ CREATE POLICY "Usuarios actualizan su propio perfil" ON usuarios FOR UPDATE USIN
 CREATE POLICY "Mazos públicos son visibles" ON mazos FOR SELECT USING (true);
 CREATE POLICY "Usuarios crean sus mazos" ON mazos FOR INSERT WITH CHECK (auth.uid() = usuario_id);
 CREATE POLICY "Usuarios votan una vez por mazo" ON votos FOR ALL USING (auth.uid() = usuario_id);
+
+-- ============================================
+-- TRIGGER: Crear usuario automáticamente al registrarse
+-- ============================================
+
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.usuarios (id, email, username, puntos_total, puntos_disponibles, racha_dias, role)
+  VALUES (new.id, new.email, new.raw_user_meta_data->>'username', 0, 0, 0, 'user');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION handle_new_user();
