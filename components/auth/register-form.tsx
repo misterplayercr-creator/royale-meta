@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createBrowserClient } from '@supabase/ssr'
 import { toast } from 'react-hot-toast'
 import Link from 'next/link'
 
@@ -17,23 +16,16 @@ export default function RegisterForm() {
     e.preventDefault()
     setLoading(true)
 
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          username,
-        },
-      },
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, username }),
     })
 
-    if (error) {
-      toast.error(error.message)
+    const data = await response.json()
+
+    if (!response.ok) {
+      toast.error(data.error || 'Error al registrarse')
     } else {
       toast.success('Cuenta creada. Revisa tu email para verificar.')
       router.push('/login')

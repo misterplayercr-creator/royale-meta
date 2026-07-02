@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Providers from '@/components/layout/providers'
+import Navbar from '@/components/layout/navbar'
+import Footer from '@/components/layout/footer'
 
 export const metadata: Metadata = {
   title: 'RoyaleMeta',
@@ -14,7 +17,11 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        {children}
+        <Providers>
+          <Navbar />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   )

@@ -1,39 +1,48 @@
 import { NextResponse } from 'next/server'
-import { createServerSupabase } from '@/lib/supabase/server'
+import type { NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
 
-export async function middleware(request: Request) {
-  const response = NextResponse.next()
-  const supabase = await createServerSupabase()
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next()
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return req.cookies.get(name)?.value
+        },
+        set(name: string, value: string, options: Record<string, unknown>) {
+          res.cookies.set(name, value, options as any)
+        },
+        remove(name: string, options: Record<string, unknown>) {
+          res.cookies.set(name, '', { ...options, maxAge: 0 })
+        },
+      },
+    }
+  )
 
   const {
     data: { session },
   } = await supabase.auth.getSession()
 
-  const path = new URL(request.url).pathname
+  const isProtectedRoute = req.nextUrl.pathname.startsWith('/dashboard') || req.nextUrl.pathname.startsWith('/admin')
+  const isAuthRoute = req.nextUrl.pathname === '/login' || req.nextUrl.pathname === '/registro'
 
-  // Rutas protegidas
-  if (path.startsWith('/dashboard') || path.startsWith('/admin')) {
-    if (!session) {
-      return NextResponse.redirect(new URL('/login', request.url))
-    }
+  if (!session && isProtectedRoute) {
+    const redirectUrl = new URL('/login', req.url)
+    return NextResponse.redirect(redirectUrl)
   }
 
-  // Rutas de admin
-  if (path.startsWith('/admin')) {
-    const { data: userData } = await supabase
-      .from('usuarios')
-      .select('role')
-      .eq('id', session?.user.id)
-      .single()
-
-    if (userData?.role !== 'admin') {
-      return NextResponse.redirect(new URL('/dashboard', request.url))
-    }
+  if (session && isAuthRoute) {
+    const redirectUrl = new URL('/dashboard', req.url)
+    return NextResponse.redirect(redirectUrl)
   }
 
-  return response
+  return res
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/admin/:path*', '/api/:path*'],
+  matcher: ['/dashboard/:path*', '/admin/:path*', '/login', '/registro'],
 }

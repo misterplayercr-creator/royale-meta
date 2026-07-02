@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Trophy, Swords, User, LogOut } from 'lucide-react'
+import { Menu, X, Trophy, Swords, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 export default function Navbar() {

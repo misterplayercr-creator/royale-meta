@@ -14,5 +14,18 @@ export async function POST(request: Request) {
   })
 
   if (error) return NextResponse.json({ error: error.message }, { status: 400 })
-  return NextResponse.json({ data })
+
+  if (data.user) {
+    await supabase.from('usuarios').insert({
+      id: data.user.id,
+      email: email,
+      username: username,
+      puntos_total: 0,
+      puntos_disponibles: 0,
+      racha_dias: 0,
+      role: 'user',
+    })
+  }
+
+  return NextResponse.json({ success: true, data })
 }

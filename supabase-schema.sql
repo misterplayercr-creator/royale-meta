@@ -2,6 +2,12 @@
 -- Ejecuta este SQL en el SQL Editor de Supabase
 
 -- ============================================
+-- EXTENSIONES
+-- ============================================
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- ============================================
 -- TABLAS PRINCIPALES
 -- ============================================
 
