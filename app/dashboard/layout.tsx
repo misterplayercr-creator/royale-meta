@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import DashboardSidebar from '@/components/dashboard/sidebar'
+import { DashboardContext } from '@/contexts/dashboard-context'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null)
@@ -45,17 +46,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="min-h-screen bg-[#0a1628]">
-      <DashboardSidebar />
-      <div className="ml-64">
-        <header className="h-16 bg-[#111d33]/80 backdrop-blur-md border-b border-[#1a2d4a] flex items-center justify-between px-8 sticky top-0 z-10">
-          <h1 className="font-cinzel text-xl font-bold text-white">Panel de Usuario</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-[#FFD700] font-semibold">{user.puntos_total} pts</span>
-          </div>
-        </header>
-        <main className="p-8">{children}</main>
+    <DashboardContext.Provider value={{ user }}>
+      <div className="min-h-screen bg-[#0a1628]">
+        <DashboardSidebar />
+        <div className="ml-64">
+          <header className="h-16 bg-[#111d33]/80 backdrop-blur-md border-b border-[#1a2d4a] flex items-center justify-between px-8 sticky top-0 z-10">
+            <h1 className="font-cinzel text-xl font-bold text-white">Panel de Usuario</h1>
+            <div className="flex items-center gap-4">
+              <span className="text-[#FFD700] font-semibold">{user.puntos_total} pts</span>
+            </div>
+          </header>
+          <main className="p-8">{children}</main>
+        </div>
       </div>
-    </div>
+    </DashboardContext.Provider>
   )
 }
