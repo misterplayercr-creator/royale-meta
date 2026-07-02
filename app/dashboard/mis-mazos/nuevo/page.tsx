@@ -6,16 +6,35 @@ import { toast } from 'react-hot-toast'
 import { createBrowserClient } from '@supabase/ssr'
 
 const CARTAS = [
-  'Golem', 'Gigante', 'Caballero', 'Valkiria', 'Mini P.E.K.K.A',
-  'Esbirros', 'Mega Esbirro', 'Murciélagos', 'Minero',
-  'Bola de Fuego', 'Veneno', 'Relámpago', 'Terremoto',
-  'Cañón', 'Tesla', 'Infernal', 'Bombardero',
+  // TANQUES (Win Conditions)
+  'Golem de Hielo', 'Golem', 'Gigante', 'Gigante Real', 'Gigante Eléctrico', 'Caballero',
+  'Valkiria', 'Mini P.E.K.K.A', 'P.E.K.K.A', 'Esqueleto Gigante',
+  
+  // ESBIRROS (Support)
+  'Esbirros', 'Mega Esbirro', 'Murciélagos', 'Minero', 'Bebé Dragón',
+  'Dragón Infernal', 'Dragón de Hielo', 'Esbirros de Hielo', 'Guerreros',
+  
+  // HECHIZOS (Spells)
+  'Bola de Fuego', 'Veneno', 'Relámpago', 'Terremoto', 'Rayo',
+  'Flechas', 'Globo de Hielo', 'Ciclón', 'Espíritu de Hielo',
+  
+  // TORRES (Buildings)
+  'Cañón', 'Tesla', 'Infernal', 'Bombardero', 'Mortero',
+  'X-Bow', 'Cañón de Hielo', 'Recolector',
+  
+  // MAGOS (Troop Spawners)
   'Mago', 'Bruja', 'Bruja Nocturna', 'Mago Eléctrico',
-  'Montapuercos', 'Rama', 'Esqueleto Gigante', 'Globo', 'Dragon',
-  'P.E.K.K.A', 'Príncipe', 'Reina', 'Príncipe Negro',
-  'Cangrejo', 'Bombilla', 'Catapulta', 'Tronco',
-  'Toro', 'Arquero', 'Arquera', 'Gárrulo',
-  'Horda', 'Gigante Noble', 'Bruxa', 'Espiritúna'
+  'Mago de Hielo', 'Mago de Fuego',
+  
+  // OTROS (Variedad)
+  'Montapuercos', 'Rama', 'Globo', 'Goliat', 'Bárbaros',
+  'Esqueletos', 'Duendecillos', 'Príncipe', 'Princesa',
+  'Príncipe Negro', 'Bandido', 'Cañón de Cañón', 'Mina',
+  'Lanzarocas', 'Mascota', 'Curandera', 'Horda',
+  'Bombilla', 'Catapulta', 'Tronco', 'Toro', 'Arquero',
+  'Arquera', 'Gárrulo', 'Lanzafuegos', 'Constructor',
+  'Gigante Noble', 'Bruxa', 'Espíritu', 'Nigromante',
+  'Lanza Templo', 'Arquero de Hielo', 'Dragon', 'Murcielagos'
 ]
 
 export default function NuevoMazoPage() {
@@ -131,7 +150,7 @@ export default function NuevoMazoPage() {
                 onClick={() => handleCardToggle(carta)}
                 className={`p-2 rounded-lg text-xs transition-colors ${
                   selectedCards.includes(carta)
-                    ? 'bg-[#8B5CF6] text-white'
+                    ? 'bg-[#87CEEB] text-[#0a1a2f]'
                     : 'bg-[#1a2d4a] text-[#94a3b8] hover:bg-[#2a3d5a]'
                 }`}
               >
@@ -142,7 +161,7 @@ export default function NuevoMazoPage() {
           {selectedCards.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-1">
               {selectedCards.map(c => (
-                <span key={c} className="px-2 py-1 rounded bg-[#8B5CF6]/20 text-xs text-[#8B5CF6]">
+                <span key={c} className="px-2 py-1 rounded bg-[#87CEEB]/20 text-xs text-[#87CEEB]">
                   {c}
                 </span>
               ))}
@@ -152,7 +171,7 @@ export default function NuevoMazoPage() {
         <button
           type="submit"
           disabled={loading || selectedCards.length !== 8}
-          className="w-full py-2 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-white font-semibold disabled:opacity-50"
+          className="w-full py-2 rounded-lg bg-gradient-to-r from-[#87CEEB] to-[#3B82F6] text-[#0a1a2f] font-semibold disabled:opacity-50"
         >
           {loading ? 'Enviando...' : 'Enviar Mazo (+15 pts)'}
         </button>

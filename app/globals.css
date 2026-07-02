@@ -5,14 +5,16 @@
 @tailwind utilities;
 
 :root {
-  --fondo-principal: #0a1628;
-  --fondo-secundario: #111d33;
-  --fondo-tarjeta: #1a2d4a;
+  --fondo-principal: #0a1a2f;
+  --fondo-secundario: #0d2140;
+  --fondo-tarjeta: #132d4d;
   --texto-principal: #ffffff;
   --texto-secundario: #94a3b8;
   --color-dorado: #FFD700;
   --color-purpura: #8B5CF6;
   --color-azul: #3B82F6;
+  --color-hielo: #87CEEB;
+  --color-hielo-claro: #B0E0E6;
   --color-exito: #10B981;
   --color-peligro: #EF4444;
 }

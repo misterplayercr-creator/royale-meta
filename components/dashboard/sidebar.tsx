@@ -35,7 +35,7 @@ export default function DashboardSidebar() {
     <aside className="w-64 h-screen fixed left-0 top-0 bg-[#111d33] border-r border-[#1a2d4a] flex flex-col">
       <div className="p-6">
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#8B5CF6] to-[#3B82F6] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#87CEEB] to-[#3B82F6] flex items-center justify-center">
             <Swords className="w-5 h-5 text-white" />
           </div>
           <span className="font-cinzel font-bold text-lg text-white">RoyaleMeta</span>
@@ -49,7 +49,7 @@ export default function DashboardSidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive ? 'bg-[#8B5CF6]/20 text-[#8B5CF6]' : 'text-[#94a3b8] hover:bg-[#1a2d4a] hover:text-white'}`}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive ? 'bg-[#87CEEB]/20 text-[#87CEEB]' : 'text-[#94a3b8] hover:bg-[#1a2d4a] hover:text-white'}`}
             >
               <item.icon className="w-5 h-5" />
               <span className="font-medium">{item.label}</span>

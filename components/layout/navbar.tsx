@@ -65,11 +65,11 @@ export default function Navbar() {
   if (isAuthenticatedRoute) return null
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a1628]/95 backdrop-blur-md shadow-lg shadow-[#8B5CF6]/10' : 'bg-transparent'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a1a2f]/95 backdrop-blur-md shadow-lg shadow-[#87CEEB]/20' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#8B5CF6] to-[#3B82F6] flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#87CEEB] to-[#3B82F6] flex items-center justify-center group-hover:scale-110 transition-transform">
               <Swords className="w-6 h-6 text-white" />
             </div>
             <span className="font-cinzel font-bold text-xl text-white group-hover:text-[#FFD700] transition-colors">
@@ -105,9 +105,9 @@ export default function Navbar() {
                 <Link href="/login" className="px-4 py-2 text-sm font-medium text-[#94a3b8] hover:text-white transition-colors">
                   Iniciar Sesión
                 </Link>
-                <Link href="/registro" className="px-6 py-2 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-sm font-semibold text-white hover:shadow-lg hover:shadow-[#8B5CF6]/30 transition-all">
-                  Registrarse
-                </Link>
+<Link href="/registro" className="px-6 py-2 rounded-lg bg-gradient-to-r from-[#87CEEB] to-[#3B82F6] text-white hover:shadow-lg hover:shadow-[#87CEEB]/30 transition-all font-semibold">
+                   Registrarse
+                 </Link>
               </>
             )}
           </div>
@@ -147,9 +147,9 @@ export default function Navbar() {
                     <Link href="/login" className="block w-full text-center py-2 text-[#94a3b8] border border-[#1a2d4a] rounded-lg" onClick={() => setIsOpen(false)}>
                       Iniciar Sesión
                     </Link>
-                    <Link href="/registro" className="block w-full text-center py-2 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-white font-semibold" onClick={() => setIsOpen(false)}>
-                      Registrarse
-                    </Link>
+<Link href="/registro" className="block w-full text-center py-2 rounded-lg bg-gradient-to-r from-[#87CEEB] to-[#3B82F6] text-white font-semibold" onClick={() => setIsOpen(false)}>
+                       Registrarse
+                     </Link>
                   </>
                 )}
               </div>

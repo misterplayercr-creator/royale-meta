@@ -35,7 +35,7 @@ export default function AdminSidebar() {
     <aside className="w-64 h-screen fixed left-0 top-0 bg-[#111d33] border-r border-[#1a2d4a] flex flex-col">
       <div className="p-6">
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#EF4444] to-[#8B5CF6] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#EF4444] to-[#87CEEB] flex items-center justify-center">
             <LayoutDashboard className="w-5 h-5 text-white" />
           </div>
           <span className="font-cinzel font-bold text-lg text-white">Admin</span>
