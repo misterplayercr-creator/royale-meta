@@ -4,20 +4,55 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Trophy, Swords, User } from 'lucide-react'
+import { Menu, X, Swords } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useSupabase } from '@/components/layout/providers'
+import { createBrowserClient } from '@supabase/ssr'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [user, setUser] = useState<any>(null)
   const pathname = usePathname()
   const router = useRouter()
+
+  const isAuthenticatedRoute = pathname.startsWith('/dashboard') || pathname.startsWith('/admin')
+
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        supabase.from('usuarios').select('username').eq('id', session.user.id).single()
+          .then(({ data }) => setUser(data))
+      }
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        supabase.from('usuarios').select('username').eq('id', session.user.id).single()
+          .then(({ data }) => setUser(data))
+      } else {
+        setUser(null)
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [supabase])
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push('/')
+  }
 
   const navLinks = [
     { href: '/mazos', label: 'Mazos' },
@@ -26,6 +61,8 @@ export default function Navbar() {
     { href: '/reglas', label: 'Reglas' },
     { href: '/contacto', label: 'Contacto' },
   ]
+
+  if (isAuthenticatedRoute) return null
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a1628]/95 backdrop-blur-md shadow-lg shadow-[#8B5CF6]/10' : 'bg-transparent'}`}>
@@ -53,12 +90,26 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
-            <Link href="/login" className="px-4 py-2 text-sm font-medium text-[#94a3b8] hover:text-white transition-colors">
-              Iniciar Sesión
-            </Link>
-            <Link href="/registro" className="px-6 py-2 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-sm font-semibold text-white hover:shadow-lg hover:shadow-[#8B5CF6]/30 transition-all">
-              Registrarse
-            </Link>
+            {user ? (
+              <>
+                <span className="text-sm text-[#94a3b8]">Hola, {user?.username}</span>
+                <Link href="/dashboard" className="px-4 py-2 text-sm font-medium text-[#94a3b8] hover:text-white transition-colors">
+                  Dashboard
+                </Link>
+                <button onClick={handleLogout} className="px-4 py-2 text-sm font-medium text-[#EF4444] hover:text-white transition-colors">
+                  Cerrar sesión
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="px-4 py-2 text-sm font-medium text-[#94a3b8] hover:text-white transition-colors">
+                  Iniciar Sesión
+                </Link>
+                <Link href="/registro" className="px-6 py-2 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-sm font-semibold text-white hover:shadow-lg hover:shadow-[#8B5CF6]/30 transition-all">
+                  Registrarse
+                </Link>
+              </>
+            )}
           </div>
 
           <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-white">
@@ -82,12 +133,25 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="pt-4 border-t border-[#1a2d4a] space-y-3">
-                <Link href="/login" className="block w-full text-center py-2 text-[#94a3b8] border border-[#1a2d4a] rounded-lg" onClick={() => setIsOpen(false)}>
-                  Iniciar Sesión
-                </Link>
-                <Link href="/registro" className="block w-full text-center py-2 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-white font-semibold" onClick={() => setIsOpen(false)}>
-                  Registrarse
-                </Link>
+                {user ? (
+                  <>
+                    <Link href="/dashboard" className="block w-full text-center py-2 text-[#94a3b8] border border-[#1a2d4a] rounded-lg" onClick={() => setIsOpen(false)}>
+                      Dashboard
+                    </Link>
+                    <button onClick={handleLogout} className="block w-full text-center py-2 text-[#EF4444] border border-[#1a2d4a] rounded-lg">
+                      Cerrar sesión
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login" className="block w-full text-center py-2 text-[#94a3b8] border border-[#1a2d4a] rounded-lg" onClick={() => setIsOpen(false)}>
+                      Iniciar Sesión
+                    </Link>
+                    <Link href="/registro" className="block w-full text-center py-2 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-white font-semibold" onClick={() => setIsOpen(false)}>
+                      Registrarse
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>
